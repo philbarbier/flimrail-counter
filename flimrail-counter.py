@@ -3,6 +3,7 @@
 ### Receives signal, increments value, sends value
 
 import socket
+import binascii
 
 UDP_LISTEN_IP = "209.141.43.9"
 UDP_SEND_IP = "198.84.230.106"
@@ -38,7 +39,7 @@ def main() :
             while True:
                 f.seek(0)
                 data, addr = sock.recvfrom(1024)
-                
+
                 state += 1
 
                 if (state % 2) == 0 :
