@@ -28,6 +28,7 @@ def main() :
             data, addr = sock.recvfrom(1024)
 
             print "Data Length: ", len(data) 
+            print repr(data)
             print "Data: ", binascii.b2a_uu(binascii.a2b_uu(data))
 
 
