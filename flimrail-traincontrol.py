@@ -4,44 +4,64 @@
 ### to train system
 
 import socket
+import logging
+from ConfigParser import ConfigParser
 
-UDP_LISTEN_IP = "209.141.43.9"
-UDP_LISTEN_PORT = 25605
+config = ConfigParser()
+config.read('config.ini')
+
+UDP_LISTEN_IP = config.get('inet', 'UDP_LISTEN_IP')
+UDP_LISTEN_PORT = config.getint('inet', 'UDP_LISTEN_PORT')
+
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((UDP_LISTEN_IP, UDP_LISTEN_PORT))
+
 
 def control_switcher(command) :
     cs = {
         '01': control_go,
         '03': control_reverse,
     }
-    m = cs.get(command, control_null)
+    m = cs.get(command, noop)
     return m()
 
-def control_null() :
-    return 'Nothing to do'
+
+# No Operation - used for debugging or something?
+def noop() :
+    logging.debug("Nothing to do")
+    return
+
 
 def control_go() :
-    return 'Train is now on'
+    logging.debug('Train is now on')
+    return
+
 
 def control_reverse() :
-    return 'Train is on and in reverse'
+    logging.debug('Train is on and in reverse')
+    return
+
 
 def main() :
  
     while True:
-        data, addr = sock.recvfrom(1024)
-        
-        dr = repr(data)
-        dr = dr[3:len(dr)-1]
+        try :
+            data, addr = sock.recvfrom(1024)
+            
+            dr = repr(data)
+            dr = dr[3:len(dr)-1]
 
-        ### print "Data: ", dr 
-        print control_switcher(dr)
+            ### print "Data: ", dr 
+            print control_switcher(dr)
+        except:
+            logging.debug("Malformed data")
 
 if __name__ == '__main__' :
+
     try :
         main()
         
     except KeyboardInterrupt :
-        print "Oooooook bye"
+        logging.debug("Shutting down")
