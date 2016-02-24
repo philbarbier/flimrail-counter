@@ -11,9 +11,6 @@ UDP_LISTEN_PORT = 25605
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((UDP_LISTEN_IP, UDP_LISTEN_PORT))
 
-def get_state() :
-    return False 
-
 def control_switcher(command) :
     cs = {
         '01': control_go,
@@ -33,10 +30,6 @@ def control_reverse() :
 
 def main() :
  
-    state = 0
-
-    do_read = get_state()
-
     while True:
         data, addr = sock.recvfrom(1024)
         
