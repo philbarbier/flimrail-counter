@@ -30,7 +30,7 @@ def control_switcher(command) :
 
 # No Operation - used for debugging or something?
 def noop() :
-    logging.debug("Nothing to do")
+    logging.debug("Shutting train off")
     return
 
 
@@ -55,7 +55,7 @@ def main() :
 
             ### print "Data: ", dr 
             print control_switcher(dr)
-        except:
+        except IOError:
             logging.debug("Malformed data")
 
 if __name__ == '__main__' :
