@@ -24,12 +24,10 @@ def control_switcher(command) :
         '01': control_go,
         '03': control_reverse,
     }
-    m = cs.get(command, noop)
+    m = cs.get(command, control_off)
     return m()
 
-
-# No Operation - used for debugging or something?
-def noop() :
+def control_off() :
     logging.debug("Shutting train off")
     return
 
